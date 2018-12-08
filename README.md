@@ -1,1 +1,1 @@
-# asset-classes
+# asset-class
