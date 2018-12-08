@@ -20,20 +20,21 @@ temp1["balanced"] = ((temp1.median_return+temp1.avg_return)/2).round(2)
 
 external_stylesheet = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app = dash.Dash(__name__,external_stylesheets=external_stylesheet)
+server = app.server
 
 app.layout = html.Div([
     # Analysis Text and Charts
     html.Div([
         html.H1("Asset Class Analysis",style=dict(textAlign='center')),
-        html.H2("Asset Class Return in Periods of High Inflation, Interest, and Energy Prices",
-            style=dict(textAlign='center')
-        ),
+        html.Div([
+            html.H3("Asset Class Return in Periods of High Inflation, Interest, and Energy Prices")
+        ],style=dict(width="60%",marginLeft="auto",marginRight="auto")),
         html.Div([
             dcc.Markdown("""
 ---
 
 This analysis compared asset class returns during periods of high inflation, interest, and 
-energy ("hi-IIE periods") prices with the goal of finding asset classes that do better when 
+energy **("hi-IIE periods")** prices with the goal of finding asset classes that do better when 
 those economic conditions are present. Hi-IIE periods are defined as periods where energy costs 
 (electricity and oil) exceed the 30-month rolling average by 10% or more and inflation and 
 interest were higher than the preceding trend.
@@ -60,6 +61,23 @@ interest were higher than the preceding trend.
 4️⃣ Defensive commodities -- e.g. gold, etc. -- outperform the market as a concrete hedge against rising prices; gold's correlation is stronger during hi-IIE periods than during lo-IIE periods.
 
 5️⃣ Stock returns vs the S&P 500 during hi-IIE periods are very volatile, potentially negating (in increased risk) any advantage gained from selecting asset classes with higher returns.
+
+---
+
+The folling chart is a pretty good summary of what changes for each asset class during hi-IIE periods.
+
+The chart represents the difference in returns vs the S&P 500 and volatility for each asset class between periods of high interest
+rates, inflation, and energy prices and periods where those three conditions are not present.
+
+> **Top left**: the asset class returns more than normal with lower volatility in hi-IIE periods. These are the asset classes we are most interested in.
+
+> **Top right**: the asset class returns more than normal but with higher volatility (aligns with theory)
+
+> **Bottom left**: the asset class returns less, but volatility is lower too (aligns with theory)
+
+> **Bottom right**: the asset class returns less but returns are more volatile 
+
+
         """)
         ],style=dict(marginLeft='auto',marginRight='auto',width='60%')),
         dcc.Graph(
@@ -140,18 +158,18 @@ interest were higher than the preceding trend.
                     ]
                 )
             ),
-            style=dict(border="black 2px")
+            style=dict(border="2px black")
         )
     ],style=dict(marginLeft='auto',marginRight='auto',width='65%')),
     html.Div([
         # dropdown
         html.Div([
-            html.H2("Select sector"),
+            html.H2("Select Asset Class"),
             dcc.Dropdown(
                 id = 'sector-dropdown',
                 options = [dict(label=col,value=col) for col in list(sectors.columns)],
                 value = "Total US",
-
+                style=dict(fontSize="20px")
             )
         ],style=dict(marginLeft='auto',marginRight='auto',width="300px")),
         # graph in hi-IIE periods
@@ -481,4 +499,4 @@ def sector_vs_inflation(sector):
 
 
 if __name__ == '__main__':
-    app.run_server(threaded=True, debug=True)
+    app.run_server(threaded=True,debug=True)
