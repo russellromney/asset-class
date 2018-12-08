@@ -244,7 +244,7 @@ rates, inflation, and energy prices and periods where those three conditions are
     [Input('sector-dropdown','value')])
 def update_correlation_div(sector):
     return dcc.Markdown(
-"""*Correlations in Hi-IIE Periods**: Energy: {} {} | Inflation: {} {} | Interest: {} {}
+"""**Correlations in Hi-IIE Periods**: Energy: {} {} | Inflation: {} {} | Interest: {} {}
 """.format(
             round(correlations.oil[sector],2), "**HIGH**" if abs(correlations.oil[sector])>.35 else "",
             round(correlations.inflation[sector],2), "**HIGH**" if abs(correlations.inflation[sector])>.35 else "",
