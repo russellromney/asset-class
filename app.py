@@ -11,7 +11,7 @@ from dash.dependencies import Input, Output, State
 
 indicators = pd.read_csv("data/indicators-hi-iie.csv",index_col=0)
 indicators_not_iie = pd.read_csv("data/indicators-not-hi-iie.csv",index_col=0)
-indicators_not_iie["data/oil_diff%_rolling_30"]*=100
+indicators_not_iie["oil_diff%_rolling_30"]*=100
 sectors = pd.read_csv("data/all-sectors-vs-sp500-iie.csv",index_col=0)
 sectors_not_iie = pd.read_csv("data/all-sectors-vs-sp500-not-iie.csv",index_col=0)
 correlations = pd.read_csv('data/correlation-analysis-all-sectors-vs-sp500.csv',index_col=0)
@@ -227,8 +227,7 @@ rates, inflation, and energy prices and periods where those three conditions are
             ])
         ],style=dict(width="100%",marginLeft='auto',marginRight='auto'))
     ],style=dict(width="100%",marginLeft='auto',marginRight='auto')),
-    html.Div([
-        html.Data
+    html.Div([""
     ])
 ])
 
