@@ -4,4 +4,7 @@ venv
 .env
 *.ipynb
 *.xlsx
-
+*.xls
+*.pdf
+*.html
+*.zip
