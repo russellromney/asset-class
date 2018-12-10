@@ -8,6 +8,8 @@ import numpy as np
 from scipy import stats 
 from dash.dependencies import Input, Output, State
 import dash_table
+from plotly import tools
+
 
 indicators = pd.read_csv("data/indicators-hi-iie.csv",index_col=0).round(2)
 indicators_not_iie = pd.read_csv("data/indicators-not-hi-iie.csv",index_col=0).round(2)
@@ -32,8 +34,34 @@ table_correlations.columns = ["asset-class","energy","inflation","interest","std
 # table 2
 table_correlations_not_iie = pd.read_csv("data/correlation-analysis-all-sectors-vs-sp500-not-iie.csv").round(2)
 table_correlations_not_iie.columns = ["asset-class","energy","inflation","interest","stdev","avg-return","median-return"]
-
-
+# subplots graph - selecting indicators
+from recessions import recessions
+indicators_all = pd.read_csv('data/indicators - oil, rollingdiff%, prime, inflation.csv',index_col=0)
+recessions_fig = tools.make_subplots(rows=3,cols=1,shared_xaxes=False)
+trace1 = go.Scatter(x = indicators_all.index,
+                    y = indicators_all.inflation,
+                    name="inflation",
+                    yaxis="y1")
+trace2 = go.Scatter(x = indicators_all.index,
+                    y = indicators_all.prime,
+                    name = 'interest',
+                    yaxis="y2")
+trace3 = go.Scatter(x=indicators_all.index,
+                    y=indicators_all['oil_diff%_rolling_30'],
+                    name='energy % of rolling avg',
+                    yaxis="y3")
+recessions_fig.append_trace(trace1,1,1)
+recessions_fig.append_trace(trace2,2,1)
+recessions_fig.append_trace(trace3,3,1)
+recessions_fig['layout'].update(
+    height=675,
+    title = "Periods of High Interest, Inflation, & Energy",
+    yaxis = dict(title = 'Inflation'),
+    yaxis2 = dict(title = "Interest Rate"),
+    yaxis3 = dict(title = "Energy Price"),
+    legend = dict(orientation="h"),
+    shapes = recessions
+)
 
 external_stylesheet = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app = dash.Dash(__name__,external_stylesheets=external_stylesheet)
@@ -84,7 +112,26 @@ interest were higher than the preceding trend.
 
 ---
 
-The folling chart is a pretty good summary of what changes for each asset class during hi-IIE periods.
+#### Selecting High-IIE Periods
+
+This chart shows how I selected high-IIE periods - selected the periods that are high in all three.
+High-IIE periods are shown with shading boxes.
+
+        """)
+        ],style=dict(marginLeft='auto',marginRight='auto',width='75%')),
+        html.Div([
+            dcc.Graph(
+                id='selecting-iie-periods-graph',
+                figure = recessions_fig
+            )# end of dcc.Graph
+        ]),
+        dcc.Markdown(
+"""
+---
+
+#### Differences in Asset Class Returns vs S&P 500 in High- and Non-High-IIE Periods
+
+The following chart is a pretty good summary of what changes for each asset class during hi-IIE periods.
 
 The chart represents the difference in returns vs the S&P 500 and volatility for each asset class between periods of high interest
 rates, inflation, and energy prices and periods where those three conditions are not present.
@@ -97,9 +144,8 @@ rates, inflation, and energy prices and periods where those three conditions are
 
 **Bottom right**: the asset class returns less but returns are more volatile 
 
-
-        """)
-        ],style=dict(marginLeft='auto',marginRight='auto',width='75%')),
+"""            
+        ),
         html.Div([
             dcc.Graph(
                 id='differences graph',
