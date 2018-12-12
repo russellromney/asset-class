@@ -73,8 +73,11 @@ app.layout = html.Div([
     html.Div([
         html.H1("Asset Class Analysis",style=dict(textAlign='center')),
         html.Div([
-            html.H3("Asset Class Return in Periods of High Inflation, Interest, and Energy Prices")
-        ],style=dict(width="60%",marginLeft="auto",marginRight="auto")),
+            html.H3("Asset Class Returns in Periods of High Inflation, Interest, and Energy Prices")
+        ],style=dict(width="60%",marginLeft="auto",marginRight="auto",textAlign='center')),
+        html.Div([
+            dcc.Markdown("""Built with ❤️ by [Russell](https://github.com/russellromney)""")
+        ],style=dict(width="60%",marginLeft="auto",marginRight="auto",textAlign='center')),
         html.Div([
             dcc.Markdown("""
 ---
@@ -904,4 +907,4 @@ def sector_vs_inflation(sector):
 
 
 if __name__ == '__main__':
-    app.run_server(threaded=True,debug=True)
+    app.run_server(threaded=True,debug=False)
